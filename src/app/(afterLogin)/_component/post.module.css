@@ -140,8 +140,20 @@
   background-color: rgba(29, 155, 240, 0.1);
 }
 
+
+
 .commentButton.commented svg, .commentButton:hover svg {
   fill: rgb(29, 155, 240)
+}
+
+.commentButton.commented.white .count, .commentButton:hover .count {
+  fill: white;
+  color: white;
+}
+
+.commentButton.commented.white .count, .repostButton:hover .count {
+  fill: white;
+  color: white;
 }
 
 .commentButton.commented .count, .commentButton:hover .count {
