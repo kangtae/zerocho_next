@@ -1,8 +1,9 @@
 "use client";
 
 import style from './signup.module.css';
-import {redirect} from "next/navigation";
+import onSubmit from '../_lib/signup';
 import BackButton from "@/app/(beforeLogin)/_component/BackButton";
+import { useFormState, useFormStatus } from 'react-dom';
 
 function showMessage(messasge: string) {
 	if (messasge === 'no_id') {
@@ -24,29 +25,8 @@ function showMessage(messasge: string) {
 }
 
 export default function SignupModal() {
-	const submit = async (formData:FormData) => {
-		"use sever";
-		if( !formData.get("id")){
-			return { message: " no_id"}
-		}
-		let shouldRedirect = false;
-		try {
-			const response  = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`,{
-				method: "post",
-				body: formData,
-				credentials: "include"
-			});
-			if(response.status === 403) {
-				return { message: "user_exists"};
-			}
-			shouldRedirect = true;
-		} catch (err) {
-			console.error(err);
-		}
-
-
-		shouldRedirect && redirect("/home") //try catch문에서 쓰면 안됨
-	}
+	const [state, formAction] = useFormState(onSubmit, { message: null });
+	const { pending } = useFormStatus();
 
 	return (
 		<>
@@ -56,7 +36,7 @@ export default function SignupModal() {
 						<BackButton />
 						<div>계정을 생성하세요.</div>
 					</div>
-					<form action={submit}>
+					<form action={formAction}>
 						<div className={style.modalBody}>
 							<div className={style.inputDiv}>
 								<label className={style.inputLabel} htmlFor="id">아이디</label>
